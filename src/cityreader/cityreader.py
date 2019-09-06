@@ -39,7 +39,7 @@ def cityreader(cities=[]):
                 line += 1
                 continue
             else:
-                city = City(row[0], row[3], row[4])
+                city = City(row[0], float(row[3]), float(row[4]))
                 cities.append(city)
                 line += 1
                 
