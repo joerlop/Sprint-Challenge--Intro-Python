@@ -1,6 +1,15 @@
 # Create a class to hold a city location. Call the class "City". It should have
 # fields for name, lat and lon (representing latitude and longitude).
 
+class City:
+    def __init__(self, name, lat, lon):
+        self.name = name
+        self.lat = lat
+        self.lon = lon
+    
+    def __repr__(self):
+        return f"{repr(self.name)}, {repr(self.lat)}, {repr(self.lon)}"
+    
 
 # We have a collection of US cities with population over 750,000 stored in the
 # file "cities.csv". (CSV stands for "comma-separated values".)
@@ -14,13 +23,26 @@
 #
 # Note that the first line of the CSV is header that describes the fields--this
 # should not be loaded into a City object.
+
+import csv
 cities = []
 
 def cityreader(cities=[]):
   # TODO Implement the functionality to read from the 'cities.csv' file
   # For each city record, create a new City instance and add it to the 
   # `cities` list
-    
+    with open('cities.csv') as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=',')
+        line = 0
+        for row in csv_reader:
+            if line == 0:
+                line += 1
+                continue
+            else:
+                city = City(row[0], float(row[3]), float(row[4]))
+                cities.append(city)
+                line += 1
+                
     return cities
 
 cityreader(cities)
@@ -60,6 +82,17 @@ for c in cities:
 
 # TODO Get latitude and longitude values from the user
 
+coordinate1 = input("Please write lat and lon separated by a comma: ")
+coordinate1_list = coordinate1.split(",")
+
+coordinate2 = input("Please write lat and lon for second coordinate: ")
+coordinate2_list = coordinate2.split(",")
+
+lat1 = coordinate1_list[0]
+lon1 = coordinate1_list[1]
+lat2 = coordinate2_list[0]
+lon2 = coordinate2_list[1]
+
 def cityreader_stretch(lat1, lon1, lat2, lon2, cities=[]):
   # within will hold the cities that fall within the specified region
   within = []
@@ -68,4 +101,16 @@ def cityreader_stretch(lat1, lon1, lat2, lon2, cities=[]):
   # Go through each city and check to see if it falls within 
   # the specified coordinates.
 
+  coords = [lat1, lat2, lon1, lon2]
+
+  max_lat = max(lat1, lat2)
+  min_lat = min(lat1, lat2)
+  max_lon = max(lon1, lon2)
+  min_lon = min(lon1, lon2)
+
+  for city in cities:
+    if (city.lat <= max_lat and city.lat >= min_lat and city.lon >= min_lon and city.lon <= max_lon):
+      within.append(city)
+  
   return within
+
